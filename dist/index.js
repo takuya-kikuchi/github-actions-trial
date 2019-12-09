@@ -6413,7 +6413,7 @@ const core = __webpack_require__(115);
 const github = __webpack_require__(677);
 const Octokit = __webpack_require__(932);
 
-core.debug("Starting action")
+core.debug("Starting...");
 
 (async () => {
     try {
@@ -6424,7 +6424,6 @@ core.debug("Starting action")
 })();
 
 async function main() {  
-  core.debug("Starting action")
   const sourceBranchName = process.env.SOURCE_BRANCH_NAME
   const owner = process.env.REPOSITORY_OWNER_NAME
   const repo = process.env.REPOSITORY_NAME
@@ -6432,11 +6431,11 @@ async function main() {
   const mergedPRNumber = process.env.MERGED_PR_NUMBER
   const mergedPRTitle = process.env.MERGED_PR_TITLE
 
-  core.debug(`sourceBranchName: ${sourceBranchName}`)
-  core.debug(`owner: ${owner}`)
-  core.debug(`repo: ${repo}`)
-  core.debug(`mergedPRNumber: ${mergedPRNumber}`)
-  core.debug(`mergedPRTitle: ${mergedPRTitle}`)
+  core.debug(`sourceBranchName: ${sourceBranchName}`);
+  core.debug(`owner: ${owner}`);
+  core.debug(`repo: ${repo}`);
+  core.debug(`mergedPRNumber: ${mergedPRNumber}`);
+  core.debug(`mergedPRTitle: ${mergedPRTitle}`);
 
   const octokit = new Octokit({ auth: apiKey });
   const pulls = await octokit.pulls.list({ 
