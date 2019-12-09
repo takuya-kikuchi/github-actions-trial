@@ -11,7 +11,7 @@ const Octokit = require("@octokit/rest");
 })();
 
 async function main() {  
-  console.log("Starting action")
+  core.debug("Starting action")
   const sourceBranchName = process.env.SOURCE_BRANCH_NAME
   const owner = process.env.REPOSITORY_OWNER_NAME
   const repo = process.env.REPOSITORY_NAME
@@ -19,11 +19,11 @@ async function main() {
   const mergedPRNumber = process.env.MERGED_PR_NUMBER
   const mergedPRTitle = process.env.MERGED_PR_TITLE
 
-  console.log(`sourceBranchName: ${sourceBranchName}`)
-  console.log(`owner: ${owner}`)
-  console.log(`repo: ${repo}`)
-  console.log(`mergedPRNumber: ${mergedPRNumber}`)
-  console.log(`mergedPRTitle: ${mergedPRTitle}`)
+  core.debug(`sourceBranchName: ${sourceBranchName}`)
+  core.debug(`owner: ${owner}`)
+  core.debug(`repo: ${repo}`)
+  core.debug(`mergedPRNumber: ${mergedPRNumber}`)
+  core.debug(`mergedPRTitle: ${mergedPRTitle}`)
 
   const octokit = new Octokit({ auth: apiKey });
   const pulls = await octokit.pulls.list({ 
@@ -31,7 +31,7 @@ async function main() {
         repo: repo,
         head: sourceBranchName });
   const pr = pulls.data.shift();
-  console.log(`Got pull request: ${pr}`)
+  core.debug(`Got pull request: ${pr}`)
   const currentBody = pr.body;
 
   await octokit.pulls.update({
@@ -41,7 +41,7 @@ async function main() {
       body: currentBody + '\n' + `Merged: PR #${mergedPRNumber}` + ` (${mergedPRTitle})`,
   });
 
-  console.log("done!");
+  core.debug("done!");
   
 }
 
