@@ -6442,9 +6442,15 @@ async function main() {
   const pulls = await octokit.pulls.list({ 
         owner: owner,
         repo: repo,
-        head: sourceBranchName });
+        head: `${owner}:${sourceBranchName}` });
   const pr = pulls.data.shift();
-  core.debug(`Got pull request: ${pr}`)
+  
+  // Do nothing when got an invalid PR
+  if(pr.head.ref != sourceBranchName) {
+    return
+  }
+
+  core.debug(`Got pull request: ${pr.number}`)
   const currentBody = pr.body;
 
   await octokit.pulls.update({
