@@ -13,12 +13,13 @@ core.debug("Starting...");
 })();
 
 async function main() {  
-  const sourceBranchName = process.env.SOURCE_BRANCH_NAME
-  const owner = process.env.REPOSITORY_OWNER_NAME
-  const repo = process.env.REPOSITORY_NAME
-  const apiKey = process.env.GITHUB_TOKEN
-  const mergedPRNumber = process.env.MERGED_PR_NUMBER
-  const mergedPRTitle = process.env.MERGED_PR_TITLE
+  
+  const sourceBranchName = process.env['SOURCE_BRANCH_NAME'];
+  const owner = process.env['REPOSITORY_OWNER_NAME'];
+  const repo = process.env['REPOSITORY_NAME'];
+  const apiKey = process.env['GITHUB_TOKEN'];
+  const mergedPRNumber = process.env['MERGED_PR_NUMBER'];
+  const mergedPRTitle = process.env['MERGED_PR_TITLE'];
 
   core.debug(`sourceBranchName: ${sourceBranchName}`);
   core.debug(`owner: ${owner}`);
