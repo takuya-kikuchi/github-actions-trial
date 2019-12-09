@@ -2,6 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const Octokit = require("@octokit/rest");
 
+core.debug("Starting action")
+
 (async () => {
     try {
         await main();

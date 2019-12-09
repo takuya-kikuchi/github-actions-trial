@@ -6413,46 +6413,50 @@ const core = __webpack_require__(115);
 const github = __webpack_require__(677);
 const Octokit = __webpack_require__(932);
 
+core.debug("Starting action")
+
 (async () => {
     try {
         await main();
     } catch (e) {
-        // Deal with the fact the chain failed
+        core.setFailed(e.message);
     }
 })();
 
 async function main() {  
-    try {
-        const sourceBranchName = core.getInput('SOURCE_BRANCH_NAME');
-        const owner = core.getInput('REPOSITORY_OWNER_NAME')
-        const repo = core.getInput('REPOSITORY_NAME')
-        const apiKey = core.getInput('GIT_API_KEY')
-        const mergedPRNumber = core.getInput('MERGED_PR_NUMBER')
+  core.debug("Starting action")
+  const sourceBranchName = process.env.SOURCE_BRANCH_NAME
+  const owner = process.env.REPOSITORY_OWNER_NAME
+  const repo = process.env.REPOSITORY_NAME
+  const apiKey = process.env.GITHUB_TOKEN
+  const mergedPRNumber = process.env.MERGED_PR_NUMBER
+  const mergedPRTitle = process.env.MERGED_PR_TITLE
 
-        const octokit = new Octokit({ auth: apiKey });
-        const pulls = await octokit.pulls.list(
-            { 
-              owner: owner,
-              repo: repo,
-              head: sourceBranchName
-            });
-        const pr = pulls.data.shift();
-        const currentBody = pr.body;
+  core.debug(`sourceBranchName: ${sourceBranchName}`)
+  core.debug(`owner: ${owner}`)
+  core.debug(`repo: ${repo}`)
+  core.debug(`mergedPRNumber: ${mergedPRNumber}`)
+  core.debug(`mergedPRTitle: ${mergedPRTitle}`)
 
-        await octokit.pulls.update({
-            owner: owner,
-            repo: repo,
-            pull_number: pr.number,
-            body: currentBody + '\n' `Merged: #${mergedPRNumber}`,
-        });
+  const octokit = new Octokit({ auth: apiKey });
+  const pulls = await octokit.pulls.list({ 
+        owner: owner,
+        repo: repo,
+        head: sourceBranchName });
+  const pr = pulls.data.shift();
+  core.debug(`Got pull request: ${pr}`)
+  const currentBody = pr.body;
 
-        console.log("done!");
-        
-      } catch (error) {
-        core.setFailed(error.message);
-      }
-      
-    }
+  await octokit.pulls.update({
+      owner: owner,
+      repo: repo,
+      pull_number: pr.number,
+      body: currentBody + '\n' + `Merged: PR #${mergedPRNumber}` + ` (${mergedPRTitle})`,
+  });
+
+  core.debug("done!");
+  
+}
 
 
 
